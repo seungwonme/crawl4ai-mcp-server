@@ -9,6 +9,10 @@ dependencies = [
     "duckduckgo-search>=7.5.5",
     "mcp[cli]>=1.6.0",
 ]
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+]
 [tool.black]
 target-version = ['py313']
 line-length = 100
