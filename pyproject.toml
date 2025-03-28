@@ -1,0 +1,47 @@
+[project]
+name = "crawl4ai-mcp-server"
+version = "0.1.0"
+description = "A simple mcp server for crawl4ai"
+readme = "README.md"
+requires-python = ">=3.13.2"
+dependencies = [
+    "crawl4ai>=0.5.0.post8",
+    "duckduckgo-search>=7.5.5",
+    "mcp[cli]>=1.6.0",
+]
+[tool.black]
+target-version = ['py313']
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+| \.hg
+| \.mypy_cache
+| \.tox
+| \.venv
+| _build
+| buck-out
+| build
+)/
+'''
+preview = true
+
+[tool.isort]
+py_version = 313
+line_length = 100
+atomic = true
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+known_first_party = []
+known_third_party = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+pythonpath = ["."]
