@@ -12,6 +12,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
 ]
 [tool.black]
 target-version = ['py313']
@@ -49,3 +50,12 @@ python_classes = "Test*"
 python_functions = "test_*"
 addopts = "-v --tb=short"
 pythonpath = ["."]
+
+asyncio_mode = "auto"
+markers = [
+    "asyncio: mark a test as an asyncio coroutine",
+]
+# 비동기 픽스처의 이벤트 루프 스코프를 함수 단위로 명시적 설정 (경고 해결 및 권장 사항)
+asyncio_default_fixture_loop_scope = "function"
+# 테스트 함수의 기본 이벤트 루프 스코프 (이미 기본값이 function일 수 있으나 명시)
+asyncio_default_test_loop_scope = "function"

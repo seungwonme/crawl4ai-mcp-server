@@ -3,7 +3,7 @@ import json
 import pytest
 from duckduckgo_search import DDGS
 
-from src.utils.file import save_text_to_unique_file
+from tests.utils.file import save_text_to_unique_file
 
 
 @pytest.fixture

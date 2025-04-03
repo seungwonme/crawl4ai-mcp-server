@@ -1,0 +1,75 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+## MCP Server
+
+## Tools
+
+```python
+@mcp.tool()
+async def ddg_search(query: str, max_result: int = 5):
+    """Search the web using DuckDuckGo
+
+    Args:
+        query: The query to search for
+        max_result: The maximum number of results to return
+
+    Returns:
+        The results of the search
+    """
+    results = DDGS().text(query, max_results=max_result)
+    return results
+```
+
+```python
+@mcp.tool()
+async def crawl_url(url: str) -> str:
+    """Crawl a url and return the content
+
+    Args:
+        url: The url to crawl
+
+    Returns:
+        The content of the url
+    """
+```
+
+```python
+@mcp.tool()
+async def crawl(url: str, depth: int = 2, max_pages: int = 50) -> List[str]:
+    """Starts crawling from the given URL, following links up to a specified depth or until a maximum number of pages is reached
+
+    Args:
+        url: The url to crawl
+        depth: The depth of the crawl
+        max_pages: The maximum number of pages to crawl
+
+    Returns:
+        A list of crawled content
+    """
+```
+
+## Directory Structure
+
+```bash
+.
+├── LICENSE
+├── pyproject.toml
+├── README.md
+├── ref.log
+├── src
+│   ├── config
+│   │   ├── browser.py
+│   │   ├── llm.py
+│   │   ├── markdown.py
+│   │   └── run.py
+│   └── main.py
+└── tests
+   ├── README.md
+   ├── test_crawl4ai.py
+   ├── test_ddg_search.py
+   └── utils
+       └── file.py
+```
