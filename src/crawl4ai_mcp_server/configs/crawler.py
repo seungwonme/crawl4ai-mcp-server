@@ -1,9 +1,14 @@
 """Crawler run configuration presets."""
 
 from crawl4ai import CrawlerRunConfig, CacheMode
+from crawl4ai.content_scraping_strategy import LXMLWebScrapingStrategy
 
 # 문서 크롤링용 기본 설정
 DOCS_CRAWL_CONFIG = CrawlerRunConfig(
+    # LXML 기반 고속 HTML 파싱
+    scraping_strategy=LXMLWebScrapingStrategy(),
+    # 캐시 우회 (항상 최신 데이터)
+    cache_mode=CacheMode.BYPASS,
     # 불필요한 태그 제거 (nav는 링크 추출을 위해 유지)
     excluded_tags=["script", "style"],
     # 외부 이미지 제외
@@ -17,6 +22,7 @@ DOCS_CRAWL_CONFIG = CrawlerRunConfig(
 
 # 빠른 텍스트 추출용
 TEXT_ONLY_CONFIG = CrawlerRunConfig(
+    scraping_strategy=LXMLWebScrapingStrategy(),
     # 캐시 활성화
     cache_mode=CacheMode.ENABLED,
     # 외부 링크 제외
@@ -30,14 +36,13 @@ TEXT_ONLY_CONFIG = CrawlerRunConfig(
 
 # 전체 데이터 수집용
 COMPREHENSIVE_CONFIG = CrawlerRunConfig(
+    scraping_strategy=LXMLWebScrapingStrategy(),
     # iframe 처리
     process_iframes=True,
     # 전체 페이지 스캔
     scan_full_page=True,
     # 스크린샷 캡처
     screenshot=True,
-    # 네트워크 요청 캡처
-    # capture_network_requests=True,  # 필요시 활성화
     # 캐시 우회
     cache_mode=CacheMode.BYPASS,
     verbose=True,

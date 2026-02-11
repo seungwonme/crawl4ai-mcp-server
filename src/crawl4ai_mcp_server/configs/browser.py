@@ -6,6 +6,7 @@ from crawl4ai import BrowserConfig
 FAST_CONFIG = BrowserConfig(
     headless=True,
     text_mode=True,  # 이미지 비활성화
+    light_mode=True,  # 백그라운드 기능 최소화로 성능 향상
     viewport_width=1280,
     viewport_height=720,
     verbose=False,
@@ -19,13 +20,13 @@ DEBUG_CONFIG = BrowserConfig(
     verbose=True,
 )
 
-# 스텔스 크롤링용 - 봇 감지 회피
+# 스텔스 크롤링용 - playwright-stealth 기반 봇 감지 회피
 STEALTH_CONFIG = BrowserConfig(
     headless=True,
     viewport_width=1920,
     viewport_height=1080,
-    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    extra_args=["--disable-blink-features=AutomationControlled"],
+    enable_stealth=True,  # playwright-stealth로 브라우저 핑거프린트 수정
+    user_agent_mode="random",  # 랜덤 User-Agent로 봇 감지 회피
 )
 
 # 프록시 사용 예시

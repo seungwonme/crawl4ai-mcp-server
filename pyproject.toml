@@ -1,10 +1,18 @@
 [project]
-name = "resources-with-crawl4ai"
+name = "crawl4ai-mcp-server"
 version = "0.1.0"
-description = "Add your description here"
+description = "MCP server for web document crawling using Crawl4AI"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "crawl4ai>=0.7.4",
+    "crawl4ai>=0.8.0",
     "typer>=0.19.2",
+    "mcp[cli]>=1.2.0",
 ]
+
+[project.scripts]
+crawl4ai-mcp-server = "crawl4ai_mcp_server.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

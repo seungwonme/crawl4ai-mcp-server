@@ -1,0 +1,42 @@
+[
+  {
+    "time": "14:17:16",
+    "user": "seungwonan",
+    "prompt": "1. crawl4ai로 crawl4ai 공식문서 가져오고 현재 프로젝트가 최신 기준으로 잘 구성되어있는지 확인\n2. context7 mcp로 모범 사례 검색 후 모범 사례인지도 확인\n\n1,2 단계를 밟으면서 개선"
+  },
+  {
+    "time": "14:39:31",
+    "user": "seungwonan",
+    "prompt": "MCP로써 가치가 있을 지 궁금하네"
+  },
+  {
+    "time": "14:39:41",
+    "user": "seungwonan",
+    "prompt": "너가 해준 모든 것들이 MCP로써 가치가 있을 지 궁금하네"
+  },
+  {
+    "time": "14:40:27",
+    "user": "seungwonan",
+    "prompt": "그치 다 노출해야지 "
+  },
+  {
+    "time": "14:47:45",
+    "user": "seungwonan",
+    "prompt": "계속해줘 "
+  },
+  {
+    "time": "14:49:56",
+    "user": "seungwonan",
+    "prompt": "mcp 설정 좀 더 쉽게 남들도 쓸 수는 없나? uvx 같은 걸로"
+  },
+  {
+    "time": "14:58:29",
+    "user": "seungwonan",
+    "prompt": "계속해줘 "
+  },
+  {
+    "time": "15:01:38",
+    "user": "seungwonan",
+    "prompt": "모듈 이름 crawl4ai-mcp -> crawl4ai-mcp-server 로 변경해줘"
+  }
+]

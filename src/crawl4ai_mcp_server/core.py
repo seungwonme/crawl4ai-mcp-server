@@ -3,36 +3,48 @@
 import asyncio
 from pathlib import Path
 
-from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
+from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig
 
-from configs.deep_crawl import create_bfs_strategy
-from strategies.content import clean_navigation_content
-from utils.domain import extract_domain, extract_output_dir_name
-from utils.path import url_to_filepath
+from .configs.deep_crawl import create_bfs_strategy, create_dfs_strategy
+from .strategies.content import clean_navigation_content
+from .utils.domain import extract_domain, extract_output_dir_name
+from .utils.path import url_to_filepath
+
+# 기본 BrowserConfig: 빠른 텍스트 크롤링에 최적화
+DEFAULT_BROWSER_CONFIG = BrowserConfig(
+    headless=True,
+    text_mode=True,
+    light_mode=True,
+    verbose=False,
+)
 
 
 async def crawl_single_page(
     url: str,
     output_dir: str = None,
     crawler_config: CrawlerRunConfig = None,
+    browser_config: BrowserConfig = None,
 ) -> str:
     """단일 페이지 크롤링하여 마크다운 반환
 
     Args:
         url: 크롤링할 URL
         output_dir: 출력 디렉토리 (None이면 파일 저장 안 함)
-        crawler_config: 크롤러 설정 (None이면 기본 설정 사용)
+        crawler_config: 크롤러 실행 설정 (None이면 기본 설정 사용)
+        browser_config: 브라우저 설정 (None이면 기본 설정 사용)
 
     Returns:
         정리된 마크다운 텍스트
     """
-    # 크롤러 설정
     if crawler_config is None:
-        from configs.crawler import DOCS_CRAWL_CONFIG
+        from .configs.crawler import DOCS_CRAWL_CONFIG
 
         crawler_config = DOCS_CRAWL_CONFIG
 
-    async with AsyncWebCrawler() as crawler:
+    if browser_config is None:
+        browser_config = DEFAULT_BROWSER_CONFIG
+
+    async with AsyncWebCrawler(config=browser_config) as crawler:
         result = await crawler.arun(url, config=crawler_config)
 
         if not result.success:
@@ -68,7 +80,9 @@ async def crawl_documentation(
     max_pages: int = 100,
     max_depth: int = 2,
     url_prefix: str = None,
+    strategy: str = "bfs",
     crawler_config: CrawlerRunConfig = None,
+    browser_config: BrowserConfig = None,
 ) -> list[dict]:
     """공식문서 크롤링
 
@@ -78,7 +92,9 @@ async def crawl_documentation(
         max_pages: 최대 크롤링 페이지 수
         max_depth: 최대 크롤링 깊이
         url_prefix: URL 프리픽스 필터 (지정 시 해당 프리픽스로 시작하는 URL만 크롤링)
-        crawler_config: 크롤러 설정 (None이면 기본 설정 사용)
+        strategy: 크롤링 전략 ("bfs" 또는 "dfs")
+        crawler_config: 크롤러 실행 설정 (None이면 기본 설정 사용)
+        browser_config: 브라우저 설정 (None이면 기본 설정 사용)
 
     Returns:
         크롤링 결과 리스트
@@ -94,7 +110,8 @@ async def crawl_documentation(
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Deep Crawl 전략 생성
-    strategy = create_bfs_strategy(
+    strategy_factory = create_dfs_strategy if strategy == "dfs" else create_bfs_strategy
+    deep_crawl_strategy = strategy_factory(
         domain=domain,
         max_depth=max_depth,
         max_pages=max_pages,
@@ -102,17 +119,20 @@ async def crawl_documentation(
         url_prefix=url_prefix,
     )
 
-    # 크롤러 설정 (제공되지 않으면 기본 설정 사용)
+    # 크롤러 설정
     if crawler_config is None:
-        from configs.crawler import DOCS_CRAWL_CONFIG
+        from .configs.crawler import DOCS_CRAWL_CONFIG
 
-        crawler_config = DOCS_CRAWL_CONFIG.clone(deep_crawl_strategy=strategy)
+        crawler_config = DOCS_CRAWL_CONFIG.clone(deep_crawl_strategy=deep_crawl_strategy)
     else:
-        crawler_config = crawler_config.clone(deep_crawl_strategy=strategy)
+        crawler_config = crawler_config.clone(deep_crawl_strategy=deep_crawl_strategy)
+
+    if browser_config is None:
+        browser_config = DEFAULT_BROWSER_CONFIG
 
     results = []
 
-    async with AsyncWebCrawler() as crawler:
+    async with AsyncWebCrawler(config=browser_config) as crawler:
         async for result in await crawler.arun(start_url, config=crawler_config):
             if result.success:
                 depth = result.metadata.get("depth", 0)
